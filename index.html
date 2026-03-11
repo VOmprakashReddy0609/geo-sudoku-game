@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geo Sudoku Trainer — Symbol Reasoning</title>
+<link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+<!-- Main Content -->
+<div id="wrapper">
+
+  <!-- Left Panel: Question Area -->
+  <div id="question-panel">
+
+    <div id="question-header">
+      <div id="qnum-badge">Q <span id="level">1</span> </div>
+      <div id="question-title">Complete the Symbol Grid</div>
+    </div>
+
+    <div id="question-text">
+      Each row and each column must contain each symbol <strong>exactly once</strong>.
+      Select a <span class="hl">?</span> cell, then choose the correct symbol from the options below.
+    </div>
+
+    <!-- Status strip -->
+    <div id="status-strip">
+      <div class="status-item">
+        <span class="status-label">Score</span>
+        <span class="status-val" id="score">0</span>
+      </div>
+      <div class="status-divider"></div>
+      <div class="status-item">
+        <span class="status-label">Correct</span>
+        <span class="status-val green" id="correct">0</span>
+      </div>
+      <div class="status-divider"></div>
+      <div class="status-item">
+        <span class="status-label">Wrong</span>
+        <span class="status-val red" id="wrong">0</span>
+      </div>
+      <div class="status-divider"></div>
+      <div class="status-item">
+        <span class="status-label">Attempts</span>
+        <span class="status-val" id="attempts">0</span>
+      </div>
+    </div>
+
+    <!-- The Grid -->
+    <div id="board-area">
+      <div id="board"></div>
+    </div>
+
+    <!-- Symbol Options -->
+    <div id="options-label">▼ SELECT SYMBOL</div>
+    <div id="options"></div>
+
+    <!-- Instruction footer -->
+    <div id="hint-bar">
+      <span>💡</span>
+      <span id="hint-text">Click on any <strong>?</strong> cell to select it, then pick the correct symbol from the choices above.</span>
+    </div>
+
+  </div>
+
+  <!-- Right Panel: Timer + Progress -->
+  <div id="side-panel">
+
+    <div id="timer-card">
+      <div id="timer-label">TIME REMAINING</div>
+      <div id="timer-display">
+        <span id="timer-min">04</span><span id="timer-colon">:</span><span id="timer-sec">00</span>
+      </div>
+      <div id="timer-bar-bg">
+        <div id="timer-bar-fill"></div>
+      </div>
+    </div>
+
+    <div id="progress-card">
+      <div class="side-card-title">PROGRESS</div>
+      <div id="progress-bar-bg">
+        <div id="progress-bar-fill"></div>
+      </div>
+      <div id="progress-label"><span id="filled-count">0</span> / <span id="total-count">9</span> filled</div>
+    </div>
+
+    <div id="level-card">
+      <div class="side-card-title">LEVEL</div>
+      <div id="level-display"><span id="level2">1</span></div>
+      <div id="level-bar-bg"><div id="level-bar-fill"></div></div>
+    </div>
+
+    <div id="instructions-card">
+      <div class="side-card-title">HOW TO SOLVE</div>
+      <ol id="how-to">
+        <li>Each row must have all symbols exactly once.</li>
+        <li>Each column must have all symbols exactly once.</li>
+        <li>Click a <strong>?</strong> to activate the cell.</li>
+        <li>Press the correct symbol to fill it in.</li>
+        <li>Wrong answers deduct 1 point.</li>
+      </ol>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- End Screen Modal -->
+<div id="modal-overlay" class="hidden">
+  <div id="modal-box">
+    <div id="modal-header">
+      
+      <div id="modal-title">Assessment Complete</div>
+    </div>
+    <div id="modal-divider"></div>
+    <div id="result-grid">
+      <div class="result-row">
+        <span class="result-label">Final Score</span>
+        <span class="result-val accent" id="res-score">0</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Level Reached</span>
+        <span class="result-val" id="res-level">1</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Total Attempts</span>
+        <span class="result-val" id="res-attempts">0</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Correct Answers</span>
+        <span class="result-val green" id="res-correct">0</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Wrong Answers</span>
+        <span class="result-val red" id="res-wrong">0</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Accuracy</span>
+        <span class="result-val" id="res-accuracy">—</span>
+      </div>
+    </div>
+    <div id="modal-divider2"></div>
+    <div id="accuracy-wrap">
+      <div id="acc-label-row"><span>Accuracy</span><span id="acc-pct">0%</span></div>
+      <div id="acc-bar-bg"><div id="acc-bar-fill"></div></div>
+    </div>
+    <button id="restart-btn" onclick="restartGame()">↺ Restart Assessment</button>
+  </div>
+</div>
+
+<script src="js/regions.js"></script>
+<script src="js/validator.js"></script>
+<script src="js/solver.js"></script>
+<script src="js/generator.js"></script>
+<script src="js/board.js"></script>
+<script src="js/game.js"></script>
+
+</body>
+</html>
