@@ -95,10 +95,16 @@ function showToast(message, type = 'bonus') {
 }
 
 // ── Boot ─────────────────────────────────────────────
-window.onload = startGame
-
-function startGame() {
+// Only pre-render the board on load — do NOT start the timer yet.
+// The timer is started by initGame(), which is called from index.html
+// after the user clicks "Start Assessment".
+window.onload = function () {
   loadLevel(1)
+  // Timer is intentionally NOT started here.
+}
+
+// Called by index.html's startGame() after the overlay is dismissed.
+function initGame() {
   startTimer()
 }
 

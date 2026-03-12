@@ -5,9 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geo Sudoku Trainer — Symbol Reasoning</title>
 <link rel="stylesheet" href="styles/style.css">
+<style>
+  /* ── Start Screen Overlay ── */
+  #start-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 20, 50, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  #start-overlay.hidden {
+    display: none;
+  }
+
+  #start-box {
+    background: #ffffff;
+    border-radius: 6px;
+    width: 420px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: modal-in 0.25s ease;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  @keyframes modal-in {
+    from { transform: translateY(30px) scale(0.97); opacity: 0; }
+    to   { transform: translateY(0) scale(1);       opacity: 1; }
+  }
+
+  /* Header — mirrors #modal-header */
+  #start-header {
+    background: #123d7a;
+    color: white;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  #start-logo-badge {
+    background: white;
+    color: #123d7a;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 2px;
+  }
+
+  #start-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.3px;
+  }
+
+  #start-divider {
+    height: 1px;
+    background: #c5cfe0;
+  }
+
+  /* Subtitle strip — mirrors #question-text */
+  #start-subtitle {
+    background: #e8f0fb;
+    border-bottom: 1px solid #c6d8f5;
+    padding: 12px 24px;
+    font-size: 13px;
+    color: #2a3a5c;
+    line-height: 1.6;
+  }
+
+  /* Rules block */
+  #start-rules {
+    padding: 20px 24px 8px;
+  }
+
+  #start-rules-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* Mirrors .result-row pattern */
+  .start-rule-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f0f3f8;
+    font-size: 13px;
+    color: #1a1a2e;
+    line-height: 1.5;
+  }
+
+  .start-rule-row:last-child {
+    border-bottom: none;
+  }
+
+  .rule-num {
+    background: #1a56a0;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .rule-text strong {
+    color: #1a56a0;
+  }
+
+  /* Warning strip — mirrors #hint-bar */
+  #start-hint {
+    background: #fffbf0;
+    border-top: 1px solid #f0e0b8;
+    padding: 10px 24px;
+    font-size: 12px;
+    color: #7a5800;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  /* Start button — mirrors #restart-btn */
+  #start-btn {
+    display: block;
+    width: calc(100% - 48px);
+    margin: 18px 24px 24px;
+    padding: 12px;
+    background: #1a56a0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  #start-btn:hover {
+    background: #123d7a;
+  }
+</style>
 </head>
 
 <body>
+
+<!-- ── Start Screen ── -->
+<div id="start-overlay">
+  <div id="start-box">
+
+    <div id="start-header">
+      <div id="start-logo-badge">GST</div>
+      <div id="start-title">Geo Sudoku Trainer</div>
+    </div>
+
+    <div id="start-divider"></div>
+
+    <div id="start-subtitle">
+      Symbol Reasoning Assessment &mdash; Read the rules carefully before you begin.
+    </div>
+
+    <div id="start-rules">
+      <div id="start-rules-label">Rules</div>
+
+      <div class="start-rule-row">
+        <div class="rule-num">1</div>
+        <div class="rule-text">Each <strong>row</strong> must contain every symbol exactly once.</div>
+      </div>
+      <div class="start-rule-row">
+        <div class="rule-num">2</div>
+        <div class="rule-text">Each <strong>column</strong> must contain every symbol exactly once.</div>
+      </div>
+      <div class="start-rule-row">
+        <div class="rule-num">3</div>
+        <div class="rule-text">Click a <strong>?</strong> cell to select it, then pick the correct symbol from the options.</div>
+      </div>
+      <div class="start-rule-row">
+        <div class="rule-num">4</div>
+        <div class="rule-text">Wrong answers <strong>deduct 1 point</strong> — think before you click!</div>
+      </div>
+    </div>
+
+    <div id="start-hint">
+      <span>💡</span>
+      <span>Use row and column elimination to narrow down the correct symbol for each <strong>?</strong> cell.</span>
+    </div>
+
+    <button id="start-btn" onclick="startGame()">&#9654; Start Assessment</button>
+
+  </div>
+</div>
+
 <!-- Main Content -->
 <div id="wrapper">
 
@@ -53,7 +254,7 @@
     </div>
 
     <!-- Symbol Options -->
-    <div id="options-label">▼ SELECT SYMBOL</div>
+    <div id="options-label">&#9660; SELECT SYMBOL</div>
     <div id="options"></div>
 
     <!-- Instruction footer -->
@@ -110,7 +311,6 @@
 <div id="modal-overlay" class="hidden">
   <div id="modal-box">
     <div id="modal-header">
-      
       <div id="modal-title">Assessment Complete</div>
     </div>
     <div id="modal-divider"></div>
@@ -145,7 +345,7 @@
       <div id="acc-label-row"><span>Accuracy</span><span id="acc-pct">0%</span></div>
       <div id="acc-bar-bg"><div id="acc-bar-fill"></div></div>
     </div>
-    <button id="restart-btn" onclick="restartGame()">↺ Restart Assessment</button>
+    <button id="restart-btn" onclick="restartGame()">&#8634; Restart Assessment</button>
   </div>
 </div>
 
@@ -155,6 +355,18 @@
 <script src="js/generator.js"></script>
 <script src="js/board.js"></script>
 <script src="js/game.js"></script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    window._gameStarted = false;
+  });
+
+  function startGame() {
+    document.getElementById('start-overlay').classList.add('hidden');
+    window._gameStarted = true;
+    if (typeof initGame   === 'function') initGame();
+  }
+</script>
 
 </body>
 </html>
