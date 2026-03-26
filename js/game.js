@@ -17,7 +17,7 @@ const GameState = {
   symbols:  [],
 
   activeCell:     null,
-  attemptedCells: new Set(),
+  attemptedCells: new Set(),   // tracks cells answered CORRECTLY (no re-farming points)
 
   // ── Simplified scoring state ──
   levelWrongCount:  0,    // track mistakes for bonus eligibility
@@ -38,12 +38,13 @@ let timerInterval = null
 //  PERFECT LEVEL BONUS → Awarded if zero mistakes on that level
 //    Bonus = Math.floor(level / 5) + 2
 //    Level 1-4:   +2 bonus
-//    Level 5-9:   +3 bonus  
+//    Level 5-9:   +3 bonus
 //    Level 10-14: +4 bonus
 //    Level 15-19: +5 bonus
 //    and so on...
 //
-//  WRONG ANSWER → No points, just prevents bonus
+//  WRONG ANSWER → -1 point EVERY time a wrong symbol is picked,
+//                  prevents perfect-level bonus, counted in accuracy.
 
 function pointsPerCell() {
   return Math.floor(GameState.level / 3) + 1
@@ -155,14 +156,14 @@ function loadLevel(level) {
 }
 
 function nextLevel() {
-  // Award perfect level bonus if no mistakes were made
+  // Award perfect level bonus if no mistakes were made this level
   if (GameState.levelWrongCount === 0) {
     const bonus = perfectLevelBonus()
     GameState.score += bonus
     document.getElementById('score').innerText = GameState.score
     showToast(`✨ Perfect Level! +${bonus}`, 'bonus')
   }
-  
+
   GameState.level++
   loadLevel(GameState.level)
 }
@@ -172,25 +173,28 @@ function checkAnswer(symbol) {
   if (!GameState.activeCell) return
 
   const { row: r, col: c } = GameState.activeCell
-  const cellKey      = `${r},${c}`
-  const isFirstGuess = !GameState.attemptedCells.has(cellKey)
+  const cellKey = `${r},${c}`
 
-  if (isFirstGuess) {
-    GameState.attemptedCells.add(cellKey)
-    GameState.attempts++
-    document.getElementById('attempts').innerText = GameState.attempts
-  }
+  // Every click always counts as an attempt and affects accuracy.
+  GameState.attempts++
+  document.getElementById('attempts').innerText = GameState.attempts
 
   if (symbol === GameState.solution[r][c]) {
-    // ── Correct: award points ──
-    const pts = pointsPerCell()
+    // ── Correct ──────────────────────────────────────
     GameState.correct++
-    GameState.score += pts
-    GameState.board[r][c] = symbol
-    GameState.activeCell   = null
-
     document.getElementById('correct').innerText = GameState.correct
-    document.getElementById('score').innerText   = GameState.score
+
+    // Only award points if this cell hasn't been solved before
+    // (prevents re-clicking a correct answer to farm points).
+    if (!GameState.attemptedCells.has(cellKey)) {
+      GameState.attemptedCells.add(cellKey)
+      const pts = pointsPerCell()
+      GameState.score += pts
+      document.getElementById('score').innerText = GameState.score
+    }
+
+    GameState.board[r][c] = symbol
+    GameState.activeCell  = null
 
     const idx = r * GameState.gridSize + c
     const el  = document.querySelectorAll('.cell')[idx]
@@ -204,12 +208,16 @@ function checkAnswer(symbol) {
     }, 250)
 
   } else {
-    // ── Wrong: track mistake (no point penalty) ──
-    if (isFirstGuess) {
-      GameState.wrong++
-      GameState.levelWrongCount++
-      document.getElementById('wrong').innerText = GameState.wrong
-    }
+    // ── Wrong ────────────────────────────────────────
+    // Every wrong pick: deduct 1 point, increment wrong counter,
+    // mark level as imperfect, and update accuracy. No isFirstGuess
+    // guard here — repeated mistakes on the same cell all count.
+    GameState.wrong++
+    GameState.levelWrongCount++
+    GameState.score = Math.max(0, GameState.score - 1)
+
+    document.getElementById('wrong').innerText = GameState.wrong
+    document.getElementById('score').innerText = GameState.score
 
     const idx = r * GameState.gridSize + c
     const el  = document.querySelectorAll('.cell')[idx]

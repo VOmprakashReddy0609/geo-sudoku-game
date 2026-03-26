@@ -1,0 +1,166 @@
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --white: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: #1f2937;
+
+  --blue: #3b82f6;
+  --blue-dark: #1e40af;
+  --blue-light: #0f172a;
+  --blue-mid: #1f2a44;
+
+  --green: #22c55e;
+  --green-bg: #052e1a;
+
+  --red: #ef4444;
+  --red-bg: #3b0a0a;
+
+  --orange: #f97316;
+  --orange-bg: #3a1a05;
+}
+
+/* ── Base ── */
+[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── Panels ── */
+[data-theme="dark"] #question-panel,
+[data-theme="dark"] #timer-card,
+[data-theme="dark"] #progress-card,
+[data-theme="dark"] #level-card,
+[data-theme="dark"] #instructions-card,
+[data-theme="dark"] #modal-box,
+[data-theme="dark"] #start-box {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+/* ── Header ── */
+[data-theme="dark"] #exam-header {
+  background: #020617;
+  border-bottom-color: var(--blue);
+}
+
+/* ── Question Text ── */
+[data-theme="dark"] #question-text {
+  background: #020617;
+  color: #cbd5f5;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Board ── */
+[data-theme="dark"] #board {
+  background: #020617;
+  border-color: #334155;
+}
+
+/* ── Cells ── */
+[data-theme="dark"] .cell {
+  background: #111827;
+  border-color: #374151;
+  color: var(--text);
+}
+
+[data-theme="dark"] .cell.blank {
+  background: #020617;
+  color: #64748b;
+}
+
+[data-theme="dark"] .cell.blank:hover {
+  background: #1e293b;
+  border-color: var(--blue);
+}
+
+[data-theme="dark"] .cell.given {
+  background: #1f2937;
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .cell.active {
+  background: #3a2a05;
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+/* Row/column highlight */
+[data-theme="dark"] .cell.highlight-rc {
+  background: #172033;
+}
+
+/* ── Options ── */
+[data-theme="dark"] .option {
+  background: #111827;
+  border-color: #374151;
+  color: var(--text);
+}
+
+[data-theme="dark"] .option:hover {
+  background: #1e293b;
+  border-color: var(--blue);
+}
+
+/* ── Status Strip ── */
+[data-theme="dark"] #status-strip {
+  background: #020617;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Timer Bar ── */
+[data-theme="dark"] #timer-bar-bg,
+[data-theme="dark"] #progress-bar-bg,
+[data-theme="dark"] #level-bar-bg,
+[data-theme="dark"] #acc-bar-bg {
+  background: #020617;
+  border-color: var(--border);
+}
+
+/* ── Hint Bar ── */
+[data-theme="dark"] #hint-bar {
+  background: #1a1205;
+  border-top: 1px solid #3a2a05;
+  color: #facc15;
+}
+
+/* ── Modal ── */
+[data-theme="dark"] #modal-header {
+  background: #020617;
+}
+
+/* ── Scroll / subtle polish ── */
+[data-theme="dark"] * {
+  scrollbar-color: #334155 #020617;
+}
+
+/* ── Toggle Button (icon button) ── */
+#theme-toggle {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #1e293b;
+  color: #facc15;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  transition: transform 0.15s ease, background 0.2s;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+[data-theme="dark"] #theme-toggle {
+  background: #facc15;
+  color: #020617;
+}

@@ -208,7 +208,7 @@ body {
   padding: 28px 20px 20px;
   display: flex;
   justify-content: center;
-  background: white;
+  background: var(--white);
 }
 
 #board {
@@ -224,7 +224,7 @@ body {
 .cell {
   width: var(--cell-size);
   height: var(--cell-size);
-  background: white;
+  background: var(--white);
   border: 1.5px solid #b8c8de;
   display: flex;
   align-items: center;
@@ -300,7 +300,7 @@ body {
   letter-spacing: 2px;
   color: var(--muted);
   padding: 4px 0 0;
-  background: white;
+  background:var(--white);
 }
 
 /* ── Options ── */
@@ -309,7 +309,7 @@ body {
   justify-content: center;
   gap: 12px;
   padding: 14px 20px 20px;
-  background: white;
+  background:var(--white);
   border-top: 1px solid #eef0f5;
   flex-wrap: wrap;
 }
@@ -317,7 +317,7 @@ body {
 .option {
   width: 62px;
   height: 62px;
-  background: white;
+  background: var(--white);
   border: 2px solid #b0c0d8;
   border-radius: 4px;
   display: flex;
@@ -365,7 +365,7 @@ body {
 
 /* ── Timer Card ── */
 #timer-card {
-  background: white;
+  background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 18px 16px 14px;
@@ -425,7 +425,7 @@ body {
 #progress-card,
 #level-card,
 #instructions-card {
-  background: white;
+  background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 14px 16px;
@@ -512,7 +512,7 @@ body {
 }
 
 #modal-box {
-  background: white;
+  background: var(--white);
   border-radius: 6px;
   width: 420px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.3);

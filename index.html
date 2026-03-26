@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geo Sudoku Trainer — Symbol Reasoning</title>
 <link rel="stylesheet" href="styles/style.css">
+<link rel="stylesheet" href="styles/darkMode.css">
 <style>
   /* ── Start Screen Overlay ── */
   #start-overlay {
@@ -60,6 +61,23 @@
     font-weight: 700;
     color: white;
     letter-spacing: 0.3px;
+  }
+
+  /* Theme toggle inside the header */
+  #start-theme-toggle {
+    margin-left: auto;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    padding: 4px 9px;
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  #start-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.28);
   }
 
   #start-divider {
@@ -158,6 +176,40 @@
   #start-btn:hover {
     background: #123d7a;
   }
+
+  /* ── Dark-mode overrides for the start box ── */
+  [data-theme="dark"] #start-box {
+    background: #1e2a40;
+  }
+  [data-theme="dark"] #start-divider {
+    background: #2e3f5c;
+  }
+  [data-theme="dark"] #start-subtitle {
+    background: #162236;
+    border-color: #2a3f60;
+    color: #a8c0e0;
+  }
+  [data-theme="dark"] #start-rules-label {
+    color: #8a9ab8;
+  }
+  [data-theme="dark"] .start-rule-row {
+    border-color: #2a3a55;
+    color: #d0dff5;
+  }
+  [data-theme="dark"] .rule-text strong {
+    color: #5fa0e8;
+  }
+  [data-theme="dark"] #start-hint {
+    background: #2a2010;
+    border-color: #5a4010;
+    color: #c8a84a;
+  }
+  [data-theme="dark"] #start-btn {
+    background: #1a56a0;
+  }
+  [data-theme="dark"] #start-btn:hover {
+    background: #123d7a;
+  }
 </style>
 </head>
 
@@ -170,6 +222,8 @@
     <div id="start-header">
       <div id="start-logo-badge">GST</div>
       <div id="start-title">Geo Sudoku Trainer</div>
+      <!-- Theme toggle lives here so it's always above the overlay -->
+      <button id="start-theme-toggle" onclick="toggleTheme()" title="Toggle dark / light mode">☀️</button>
     </div>
 
     <div id="start-divider"></div>
@@ -357,6 +411,30 @@
 <script src="js/game.js"></script>
 
 <script>
+  /* ── Theme helpers ── */
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const icon = theme === 'dark' ? '🌙' : '☀️';
+    // Keep both toggle buttons in sync
+    const t1 = document.getElementById('start-theme-toggle');
+    const t2 = document.getElementById('theme-toggle');
+    if (t1) t1.innerText = icon;
+    if (t2) t2.innerText = icon;
+    localStorage.setItem('theme', theme);
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  }
+
+  /* Apply saved theme immediately on load */
+  (function () {
+    const saved = localStorage.getItem('theme') || 'light';
+    applyTheme(saved);
+  })();
+
+  /* ── Game bootstrap ── */
   window.addEventListener('DOMContentLoaded', () => {
     window._gameStarted = false;
   });
@@ -364,9 +442,12 @@
   function startGame() {
     document.getElementById('start-overlay').classList.add('hidden');
     window._gameStarted = true;
-    if (typeof initGame   === 'function') initGame();
+    if (typeof initGame === 'function') initGame();
   }
 </script>
+
+<!-- Floating toggle shown after the overlay closes -->
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle dark / light mode">☀️</button>
 
 </body>
 </html>
