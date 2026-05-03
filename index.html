@@ -259,6 +259,13 @@
     </div>
 
     <button id="start-btn" onclick="startGame()">&#9654; Start Assessment</button>
+    <button id="resume-btn" onclick="resumeSavedGame()" style="display:none;
+      width: calc(100% - 48px); margin: 0 24px 12px; padding: 12px;
+      background: #1a7a3c; color: white; border: none; border-radius: 4px;
+      font-size: 14px; font-weight: 700; font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0.5px; cursor: pointer; transition: background 0.15s;">
+      &#9654; Resume Game
+    </button>
 
   </div>
 </div>
@@ -436,12 +443,37 @@
 
   /* ── Game bootstrap ── */
   window.addEventListener('DOMContentLoaded', () => {
-    window._gameStarted = false;
+    // Check for a saved in-progress session and update the start overlay buttons
+    const saved = localStorage.getItem('geoSudoku_state');
+    if (saved) {
+      try {
+        const s = JSON.parse(saved);
+        if (s && s.gameStarted) {
+          // Offer Resume as the primary action
+          const resumeBtn = document.getElementById('resume-btn');
+          const startBtn  = document.getElementById('start-btn');
+          if (resumeBtn) resumeBtn.style.display = 'block';
+          if (startBtn)  {
+            startBtn.textContent = '↺ New Game (reset progress)';
+            startBtn.style.background = '#6b7280';
+          }
+        }
+      } catch (e) { /* malformed save — ignore */ }
+    }
   });
 
-  function startGame() {
+  // Resume the existing saved session (skips the start overlay logic in game.js
+  // since window.onload already handles it; we just dismiss the overlay here).
+  function resumeSavedGame() {
     document.getElementById('start-overlay').classList.add('hidden');
-    window._gameStarted = true;
+    // game.js window.onload has already restored state and started the timer
+    // when it detected gameStarted=true, so nothing more to do here.
+  }
+
+  function startGame() {
+    // New game — clear any existing save first
+    try { localStorage.removeItem('geoSudoku_state'); } catch(e) {}
+    document.getElementById('start-overlay').classList.add('hidden');
     if (typeof initGame === 'function') initGame();
   }
 </script>
